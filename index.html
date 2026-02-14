@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day Flowers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-locked">
+
+  <!-- Lock Screen -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-content">
+      <div class="lock-icon">🔒</div>
+      <h2 class="lock-title">A Special Surprise</h2>
+      <p class="lock-subtitle">Enter the code to unlock your flowers</p>
+      <div class="pin-inputs" id="pinInputs">
+        <input type="tel" maxlength="1" class="pin-digit" data-index="0" autofocus>
+        <input type="tel" maxlength="1" class="pin-digit" data-index="1">
+        <input type="tel" maxlength="1" class="pin-digit" data-index="2">
+        <input type="tel" maxlength="1" class="pin-digit" data-index="3">
+      </div>
+      <p class="lock-hint" id="lockHint">💕</p>
+      <div class="lock-hearts">
+        <span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Hearts Background -->
+  <div class="hearts-bg" id="heartsBg"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Valentine's Day Flowers</h1>
+    <p class="subtitle">Flowers that can last forever, like our love</p>
+    <p class="dedication">To Kyla, from Christian Morales</p>
+    <p class="instruction">~ tap a glowing rose to reveal a surprise ~</p>
+  </header>
+
+  <!-- Bouquet Scene -->
+  <section class="bouquet-scene">
+    <div class="bouquet-wrapper" id="bouquetWrapper">
+
+      <!-- Flowers (hidden at first, spring out when box opens) -->
+      <div class="flowers-container" id="flowersContainer">
+        <!-- Baby's Breath Decoration -->
+        <span class="babys-breath bb-1">⚘</span>
+        <span class="babys-breath bb-2">⚘</span>
+        <span class="babys-breath bb-3">✿</span>
+        <span class="babys-breath bb-4">✿</span>
+        <span class="babys-breath bb-5">⚘</span>
+        <span class="babys-breath bb-6">✿</span>
+        <span class="babys-breath bb-7">⚘</span>
+
+        <!-- Row 1: Top Rose (Clickable) -->
+        <div class="rose rose-1 clickable" data-rose="1" onclick="openRoseModal(1, event)">
+          <div class="rose-glow"></div>
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="rose rose-2 clickable" data-rose="2" onclick="openRoseModal(2, event)">
+          <div class="rose-glow"></div>
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+        <div class="rose rose-3" data-rose="0">
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="rose rose-4" data-rose="0">
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+        <div class="rose rose-5 clickable" data-rose="3" onclick="openRoseModal(3, event)">
+          <div class="rose-glow"></div>
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+        <div class="rose rose-6" data-rose="0">
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="rose rose-7 clickable" data-rose="4" onclick="openRoseModal(4, event)">
+          <div class="rose-glow"></div>
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+        <div class="rose rose-8" data-rose="0">
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+
+        <!-- Row 5 -->
+        <div class="rose rose-9 clickable" data-rose="5" onclick="openRoseModal(5, event)">
+          <div class="rose-glow"></div>
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+        <div class="rose rose-10" data-rose="0">
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+        <div class="rose rose-11" data-rose="0">
+          <span class="rose-bloom">🌹</span>
+          <div class="rose-stem"></div>
+        </div>
+      </div>
+
+      <!-- Gift Box -->
+      <div class="wrapping">
+        <div class="ribbon-bow">🎀</div>
+
+        <!-- Box Lid (opens outward) -->
+        <div class="box-lid">
+          <div class="lid-flap lid-flap-left"></div>
+          <div class="lid-flap lid-flap-right"></div>
+          <div class="lid-tissue lid-tissue-left">❦</div>
+          <div class="lid-tissue lid-tissue-right">❦</div>
+        </div>
+
+        <div class="wrapping-body"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Made with ❤️ for Kyla — Happy Valentine's Day</p>
+  </footer>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-image-frame" id="modalImageFrame">
+        <!-- Photo or placeholder goes here -->
+        <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+        <div class="color-hint" id="colorHint">Swipe to color in the photo! 🖍️</div>
+        <div class="reveal-celebration" id="revealCelebration"></div>
+      </div>
+      <div class="reveal-progress-wrap">
+        <div class="reveal-progress-bar" id="revealProgress"></div>
+      </div>
+      <p class="modal-message" id="modalMessage"></p>
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    //  Rose Data - Each clickable rose's content
+    //  Replace the "image" values with your own photo paths!
+    // ========================================
+    const roseData = {
+      1: {
+        image: "assets/photo1.png",
+        emoji: "💐",
+        message: "2021 — even with a mask I knew how beautiful you are",
+        label: ""
+      },
+      2: {
+        image: "assets/photo2.png",
+        emoji: "💕",
+        message: "2022 — you dropped your drink but thanks for dinner, I love you",
+        label: ""
+      },
+      3: {
+        image: "assets/photo3.png",
+        emoji: "🌸",
+        message: "2023 — Palm Springs, we won the trivia but we didn't cheat, we just filled in the sheet. I love you",
+        label: ""
+      },
+      4: {
+        image: "assets/photo4.png",
+        emoji: "💗",
+        message: "2024 — we hopped on board but I always knew we had the rest of our lives in store",
+        label: ""
+      },
+      5: {
+        image: "assets/photo5.png",
+        emoji: "🥀",
+        message: "2025 — one of my favorite photos ever because I want to hold you tight and never let you go. I love you so much",
+        label: ""
+      }
+    };
+
+    // ========================================
+    //  Scratch / Color-to-Reveal Engine
+    // ========================================
+    let scratchCtx = null;
+    let isScratching = false;
+    let lastScratchPos = null;
+    let revealPercent = 0;
+    let isFullyRevealed = false;
+    let currentRoseId = null;
+
+    // The brush colors cycle through crayon-like pastel hues
+    const crayonColors = [
+      '#FFB6C1', '#FF69B4', '#FF91A4', '#FFC0CB',
+      '#DB7093', '#F08080', '#FFD700', '#FFA07A',
+      '#FF6F61', '#E6A8D7', '#C9A0DC', '#FFB347'
+    ];
+    let crayonIdx = 0;
+
+    function initScratchCanvas() {
+      const canvas = document.getElementById('scratchCanvas');
+      const frame = document.getElementById('modalImageFrame');
+
+      // Use offsetWidth/Height for accurate sizing (not affected by animation)
+      const w = frame.offsetWidth;
+      const h = frame.offsetHeight;
+
+      // Match canvas internal resolution (2x for retina)
+      canvas.width = w * 2;
+      canvas.height = h * 2;
+
+      // Let CSS handle the display size (width:100%, height:100%)
+      canvas.style.width = '';
+      canvas.style.height = '';
+
+      scratchCtx = canvas.getContext('2d');
+      scratchCtx.scale(2, 2);
+
+      // Reset state
+      isScratching = false;
+      lastScratchPos = null;
+      revealPercent = 0;
+      isFullyRevealed = false;
+      crayonIdx = 0;
+
+      // Draw the cover art (what they "color through")
+      drawCoverArt(w, h);
+
+      // Reset UI
+      canvas.classList.remove('revealed');
+      document.getElementById('colorHint').classList.remove('hidden');
+      document.getElementById('revealProgress').style.width = '0%';
+      document.getElementById('revealCelebration').classList.remove('show');
+      document.getElementById('revealCelebration').innerHTML = '';
+    }
+
+    function drawCoverArt(w, h) {
+      const ctx = scratchCtx;
+
+      // Soft gradient background
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, '#E8A0B0');
+      grad.addColorStop(0.5, '#D98A9E');
+      grad.addColorStop(1, '#E09AAD');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw decorative hearts pattern
+      ctx.globalAlpha = 0.12;
+      for (let i = 0; i < 30; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const size = 8 + Math.random() * 20;
+        drawHeart(ctx, x, y, size, crayonColors[Math.floor(Math.random() * crayonColors.length)]);
+      }
+
+      // Draw some swirl / doodle lines
+      ctx.globalAlpha = 0.08;
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i < 8; i++) {
+        ctx.beginPath();
+        const startX = Math.random() * w;
+        const startY = Math.random() * h;
+        ctx.moveTo(startX, startY);
+        for (let j = 0; j < 5; j++) {
+          const cpX = startX + (Math.random() - 0.5) * 120;
+          const cpY = startY + (Math.random() - 0.5) * 120;
+          const endX = startX + (Math.random() - 0.5) * 160;
+          const endY = startY + (Math.random() - 0.5) * 160;
+          ctx.quadraticCurveTo(cpX, cpY, endX, endY);
+        }
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha = 1;
+
+      // Center text prompt
+      ctx.fillStyle = '#FFFFFF';
+      ctx.globalAlpha = 0.5;
+      ctx.font = '600 16px Playfair Display, Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Color me in! 🖍️', w / 2, h / 2 - 12);
+      ctx.font = 'italic 12px Georgia, serif';
+      ctx.globalAlpha = 0.35;
+      ctx.fillText('swipe across to reveal', w / 2, h / 2 + 14);
+      ctx.globalAlpha = 1;
+    }
+
+    function drawHeart(ctx, x, y, size, color) {
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.translate(x, y);
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.3);
+      ctx.bezierCurveTo(-size * 0.5, -size * 0.3, -size, size * 0.1, 0, size);
+      ctx.bezierCurveTo(size, size * 0.1, size * 0.5, -size * 0.3, 0, size * 0.3);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Scratch/erase with a crayon brush
+    function scratchAt(x, y) {
+      if (!scratchCtx || isFullyRevealed) return;
+
+      const canvas = document.getElementById('scratchCanvas');
+      const rect = canvas.getBoundingClientRect();
+      const cx = (x - rect.left);
+      const cy = (y - rect.top);
+
+      scratchCtx.globalCompositeOperation = 'destination-out';
+
+      // Draw a soft round brush stroke
+      const brushSize = 28;
+
+      if (lastScratchPos) {
+        // Interpolate between last pos and current for smooth strokes
+        const dx = cx - lastScratchPos.x;
+        const dy = cy - lastScratchPos.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const steps = Math.max(1, Math.floor(dist / 4));
+
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          const px = lastScratchPos.x + dx * t;
+          const py = lastScratchPos.y + dy * t;
+
+          // Main erase circle
+          scratchCtx.beginPath();
+          scratchCtx.arc(px, py, brushSize, 0, Math.PI * 2);
+          scratchCtx.fill();
+
+          // Softer outer edge for crayon texture
+          scratchCtx.globalAlpha = 0.5;
+          scratchCtx.beginPath();
+          scratchCtx.arc(px, py, brushSize + 6, 0, Math.PI * 2);
+          scratchCtx.fill();
+          scratchCtx.globalAlpha = 1;
+
+          // Tiny random dots around the stroke for that crayon grain
+          for (let d = 0; d < 3; d++) {
+            const ox = (Math.random() - 0.5) * brushSize * 2.2;
+            const oy = (Math.random() - 0.5) * brushSize * 2.2;
+            scratchCtx.beginPath();
+            scratchCtx.arc(px + ox, py + oy, 2 + Math.random() * 3, 0, Math.PI * 2);
+            scratchCtx.fill();
+          }
+        }
+      } else {
+        scratchCtx.beginPath();
+        scratchCtx.arc(cx, cy, brushSize, 0, Math.PI * 2);
+        scratchCtx.fill();
+      }
+
+      scratchCtx.globalCompositeOperation = 'source-over';
+      lastScratchPos = { x: cx, y: cy };
+
+      // Measure how much has been revealed
+      updateRevealProgress();
+    }
+
+    function updateRevealProgress() {
+      if (isFullyRevealed) return;
+
+      const canvas = document.getElementById('scratchCanvas');
+      const ctx = scratchCtx;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Sample a grid of pixels for performance (don't check every pixel)
+      const sampleSize = 40;
+      const stepX = Math.floor(w / sampleSize);
+      const stepY = Math.floor(h / sampleSize);
+      let transparent = 0;
+      let total = 0;
+
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const data = imageData.data;
+
+      for (let y = 0; y < h; y += stepY) {
+        for (let x = 0; x < w; x += stepX) {
+          const idx = (y * w + x) * 4;
+          total++;
+          if (data[idx + 3] < 128) {
+            transparent++;
+          }
+        }
+      }
+
+      revealPercent = Math.round((transparent / total) * 100);
+      document.getElementById('revealProgress').style.width = revealPercent + '%';
+
+      // Hide the hint after 15% scratched
+      if (revealPercent > 15) {
+        document.getElementById('colorHint').classList.add('hidden');
+      }
+
+      // Auto-reveal at 65%
+      if (revealPercent >= 65 && !isFullyRevealed) {
+        fullyReveal();
+      }
+    }
+
+    function fullyReveal() {
+      isFullyRevealed = true;
+      const canvas = document.getElementById('scratchCanvas');
+      canvas.classList.add('revealed');
+      document.getElementById('revealProgress').style.width = '100%';
+      document.getElementById('colorHint').classList.add('hidden');
+
+      // Show celebration sparkle
+      const celeb = document.getElementById('revealCelebration');
+      celeb.innerHTML = '✨💖✨';
+      celeb.style.fontSize = '2.5rem';
+      celeb.classList.add('show');
+      setTimeout(() => celeb.classList.remove('show'), 800);
+
+      // Petal burst at center of card
+      const rect = canvas.getBoundingClientRect();
+      createPetalBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }
+
+    // ---- Mouse events ----
+    document.getElementById('scratchCanvas').addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      isScratching = true;
+      lastScratchPos = null;
+      scratchAt(e.clientX, e.clientY);
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isScratching) return;
+      e.preventDefault();
+      scratchAt(e.clientX, e.clientY);
+    });
+
+    document.addEventListener('mouseup', () => {
+      isScratching = false;
+      lastScratchPos = null;
+    });
+
+    // ---- Touch events (mobile) ----
+    document.getElementById('scratchCanvas').addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      isScratching = true;
+      lastScratchPos = null;
+      const touch = e.touches[0];
+      scratchAt(touch.clientX, touch.clientY);
+    }, { passive: false });
+
+    document.getElementById('scratchCanvas').addEventListener('touchmove', (e) => {
+      if (!isScratching) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      scratchAt(touch.clientX, touch.clientY);
+    }, { passive: false });
+
+    document.getElementById('scratchCanvas').addEventListener('touchend', () => {
+      isScratching = false;
+      lastScratchPos = null;
+    });
+
+    // ========================================
+    //  Open rose modal with petal burst effect
+    // ========================================
+    function openRoseModal(roseId, event) {
+      const data = roseData[roseId];
+      if (!data) return;
+      currentRoseId = roseId;
+
+      // Petal burst animation at click point
+      createPetalBurst(event.clientX, event.clientY);
+
+      // Set modal content (image underneath canvas)
+      const imageFrame = document.getElementById('modalImageFrame');
+      const message = document.getElementById('modalMessage');
+
+      // Remove existing image/placeholder, keep canvas + hint + celebration
+      const existingImg = imageFrame.querySelector('img');
+      const existingPlaceholder = imageFrame.querySelector('.placeholder-art');
+      if (existingImg) existingImg.remove();
+      if (existingPlaceholder) existingPlaceholder.remove();
+
+      if (data.image) {
+        const img = document.createElement('img');
+        img.src = data.image;
+        img.alt = `Valentine's photo ${roseId}`;
+        imageFrame.insertBefore(img, imageFrame.firstChild);
+      } else {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'placeholder-art';
+        placeholder.innerHTML = `
+          <span>${data.emoji}</span>
+          <span class="art-label">${data.label}</span>
+        `;
+        imageFrame.insertBefore(placeholder, imageFrame.firstChild);
+      }
+
+      message.innerHTML = `
+        "${data.message}"
+        <span class="rose-number">Rose ${roseId} of 5</span>
+      `;
+
+      // Show modal
+      document.getElementById('modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Initialize scratch canvas after modal animation completes (0.4s)
+      setTimeout(() => {
+        initScratchCanvas();
+      }, 450);
+    }
+
+    // ========================================
+    //  Close modal
+    // ========================================
+    function closeModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+      isScratching = false;
+      lastScratchPos = null;
+      currentRoseId = null;
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ========================================
+    //  Petal burst particle effect
+    // ========================================
+    function createPetalBurst(x, y) {
+      const burst = document.createElement('div');
+      burst.className = 'petal-burst';
+      burst.style.left = x + 'px';
+      burst.style.top = y + 'px';
+
+      const petals = ['🌸', '🩷', '💗', '✨', '🌺', '💮'];
+      
+      for (let i = 0; i < 12; i++) {
+        const petal = document.createElement('span');
+        petal.className = 'petal';
+        petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+
+        const angle = (Math.PI * 2 / 12) * i;
+        const distance = 60 + Math.random() * 80;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        const rot = (Math.random() - 0.5) * 720;
+
+        petal.style.setProperty('--tx', tx + 'px');
+        petal.style.setProperty('--ty', ty + 'px');
+        petal.style.setProperty('--rot', rot + 'deg');
+        petal.style.animationDelay = (Math.random() * 0.15) + 's';
+
+        burst.appendChild(petal);
+      }
+
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 2000);
+    }
+
+    // ========================================
+    //  Floating hearts background
+    // ========================================
+    function createFloatingHearts() {
+      const container = document.getElementById('heartsBg');
+      const hearts = ['♥', '♡', '❤', '💕'];
+      
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'floating-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (0.6 + Math.random() * 1.2) + 'rem';
+        heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+        heart.style.animationDelay = (Math.random() * 15) + 's';
+        container.appendChild(heart);
+      }
+    }
+
+    createFloatingHearts();
+
+    // ========================================
+    //  Lock Screen / PIN Entry
+    // ========================================
+    const CORRECT_PIN = '0129';
+    const pinDigits = document.querySelectorAll('.pin-digit');
+    const lockHint = document.getElementById('lockHint');
+
+    // Auto-focus first digit
+    pinDigits[0].focus();
+
+    pinDigits.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val;
+
+        if (val) {
+          input.classList.add('filled');
+          // Move to next input
+          if (idx < 3) {
+            pinDigits[idx + 1].focus();
+          }
+        }
+
+        // Check if all 4 digits are filled
+        const fullPin = Array.from(pinDigits).map(d => d.value).join('');
+        if (fullPin.length === 4) {
+          setTimeout(() => checkPin(fullPin), 150);
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        // Backspace: clear and go back
+        if (e.key === 'Backspace') {
+          if (!input.value && idx > 0) {
+            pinDigits[idx - 1].value = '';
+            pinDigits[idx - 1].classList.remove('filled');
+            pinDigits[idx - 1].focus();
+            e.preventDefault();
+          } else {
+            input.classList.remove('filled');
+          }
+        }
+      });
+
+      // Select all text on focus for easy re-entry
+      input.addEventListener('focus', () => {
+        input.select();
+      });
+    });
+
+    function checkPin(pin) {
+      if (pin === CORRECT_PIN) {
+        // Success!
+        pinDigits.forEach(d => d.classList.add('success'));
+        lockHint.textContent = '💖 Welcome, Kyla 💖';
+        lockHint.classList.remove('error-msg');
+        lockHint.style.opacity = '1';
+        lockHint.style.fontSize = '1.1rem';
+
+        // Unlock after a brief moment
+        setTimeout(() => {
+          document.getElementById('lockScreen').classList.add('unlocked');
+          document.body.classList.remove('page-locked');
+          startBouquetAnimation();
+        }, 800);
+      } else {
+        // Wrong PIN
+        pinDigits.forEach(d => {
+          d.classList.add('error');
+          d.classList.remove('filled');
+        });
+        lockHint.textContent = 'Try again 💕';
+        lockHint.classList.add('error-msg');
+
+        setTimeout(() => {
+          pinDigits.forEach(d => {
+            d.value = '';
+            d.classList.remove('error');
+          });
+          lockHint.textContent = '💕';
+          lockHint.classList.remove('error-msg');
+          pinDigits[0].focus();
+        }, 1000);
+      }
+    }
+
+    // ========================================
+    //  Box Opening Sequence (starts after unlock)
+    // ========================================
+    function startBouquetAnimation() {
+      // After all roses have sprung out, enable sparkle effects
+      setTimeout(() => {
+        document.getElementById('bouquetWrapper').classList.add('opened');
+      }, 3400);
+
+      // Show instruction text only after box is fully open
+      const instructionEl = document.querySelector('.header .instruction');
+      if (instructionEl) {
+        instructionEl.style.opacity = '0';
+        instructionEl.style.transition = 'opacity 0.6s ease';
+        setTimeout(() => {
+          instructionEl.style.opacity = '';
+        }, 3500);
+      }
+    }
+  </script>
+
+</body>
+</html>
