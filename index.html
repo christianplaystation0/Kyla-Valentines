@@ -155,46 +155,39 @@
   </div>
 
   <script>
-    // ========================================
-    //  Rose Data - Each clickable rose's content
-    //  Replace the "image" values with your own photo paths!
-    // ========================================
     const roseData = {
       1: {
-        image: "assets/photo1.png",
+        image: "photo1.jpg",
         emoji: "💐",
         message: "2021 — even with a mask I knew how beautiful you are",
         label: ""
       },
       2: {
-        image: "assets/photo2.png",
+        image: "photo2.jpg",
         emoji: "💕",
         message: "2022 — you dropped your drink but thanks for dinner, I love you",
         label: ""
       },
       3: {
-        image: "assets/photo3.png",
+        image: "photo3.jpg",
         emoji: "🌸",
         message: "2023 — Palm Springs, we won the trivia but we didn't cheat, we just filled in the sheet. I love you",
         label: ""
       },
       4: {
-        image: "assets/photo4.png",
+        image: "photo4.jpg",
         emoji: "💗",
         message: "2024 — we hopped on board but I always knew we had the rest of our lives in store",
         label: ""
       },
       5: {
-        image: "assets/photo5.png",
+        image: "photo5.jpg",
         emoji: "🥀",
         message: "2025 — one of my favorite photos ever because I want to hold you tight and never let you go. I love you so much",
         label: ""
       }
     };
 
-    // ========================================
-    //  Scratch / Color-to-Reveal Engine
-    // ========================================
     let scratchCtx = null;
     let isScratching = false;
     let lastScratchPos = null;
@@ -202,7 +195,6 @@
     let isFullyRevealed = false;
     let currentRoseId = null;
 
-    // The brush colors cycle through crayon-like pastel hues
     const crayonColors = [
       '#FFB6C1', '#FF69B4', '#FF91A4', '#FFC0CB',
       '#DB7093', '#F08080', '#FFD700', '#FFA07A',
@@ -213,33 +205,20 @@
     function initScratchCanvas() {
       const canvas = document.getElementById('scratchCanvas');
       const frame = document.getElementById('modalImageFrame');
-
-      // Use offsetWidth/Height for accurate sizing (not affected by animation)
       const w = frame.offsetWidth;
       const h = frame.offsetHeight;
-
-      // Match canvas internal resolution (2x for retina)
       canvas.width = w * 2;
       canvas.height = h * 2;
-
-      // Let CSS handle the display size (width:100%, height:100%)
       canvas.style.width = '';
       canvas.style.height = '';
-
       scratchCtx = canvas.getContext('2d');
       scratchCtx.scale(2, 2);
-
-      // Reset state
       isScratching = false;
       lastScratchPos = null;
       revealPercent = 0;
       isFullyRevealed = false;
       crayonIdx = 0;
-
-      // Draw the cover art (what they "color through")
       drawCoverArt(w, h);
-
-      // Reset UI
       canvas.classList.remove('revealed');
       document.getElementById('colorHint').classList.remove('hidden');
       document.getElementById('revealProgress').style.width = '0%';
@@ -249,16 +228,12 @@
 
     function drawCoverArt(w, h) {
       const ctx = scratchCtx;
-
-      // Soft gradient background
       const grad = ctx.createLinearGradient(0, 0, w, h);
       grad.addColorStop(0, '#E8A0B0');
       grad.addColorStop(0.5, '#D98A9E');
       grad.addColorStop(1, '#E09AAD');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
-
-      // Draw decorative hearts pattern
       ctx.globalAlpha = 0.12;
       for (let i = 0; i < 30; i++) {
         const x = Math.random() * w;
@@ -266,8 +241,6 @@
         const size = 8 + Math.random() * 20;
         drawHeart(ctx, x, y, size, crayonColors[Math.floor(Math.random() * crayonColors.length)]);
       }
-
-      // Draw some swirl / doodle lines
       ctx.globalAlpha = 0.08;
       ctx.strokeStyle = '#FFFFFF';
       ctx.lineWidth = 1.5;
@@ -285,10 +258,7 @@
         }
         ctx.stroke();
       }
-
       ctx.globalAlpha = 1;
-
-      // Center text prompt
       ctx.fillStyle = '#FFFFFF';
       ctx.globalAlpha = 0.5;
       ctx.font = '600 16px Playfair Display, Georgia, serif';
@@ -313,45 +283,31 @@
       ctx.restore();
     }
 
-    // Scratch/erase with a crayon brush
     function scratchAt(x, y) {
       if (!scratchCtx || isFullyRevealed) return;
-
       const canvas = document.getElementById('scratchCanvas');
       const rect = canvas.getBoundingClientRect();
       const cx = (x - rect.left);
       const cy = (y - rect.top);
-
       scratchCtx.globalCompositeOperation = 'destination-out';
-
-      // Draw a soft round brush stroke
       const brushSize = 28;
-
       if (lastScratchPos) {
-        // Interpolate between last pos and current for smooth strokes
         const dx = cx - lastScratchPos.x;
         const dy = cy - lastScratchPos.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const steps = Math.max(1, Math.floor(dist / 4));
-
         for (let i = 0; i <= steps; i++) {
           const t = i / steps;
           const px = lastScratchPos.x + dx * t;
           const py = lastScratchPos.y + dy * t;
-
-          // Main erase circle
           scratchCtx.beginPath();
           scratchCtx.arc(px, py, brushSize, 0, Math.PI * 2);
           scratchCtx.fill();
-
-          // Softer outer edge for crayon texture
           scratchCtx.globalAlpha = 0.5;
           scratchCtx.beginPath();
           scratchCtx.arc(px, py, brushSize + 6, 0, Math.PI * 2);
           scratchCtx.fill();
           scratchCtx.globalAlpha = 1;
-
-          // Tiny random dots around the stroke for that crayon grain
           for (let d = 0; d < 3; d++) {
             const ox = (Math.random() - 0.5) * brushSize * 2.2;
             const oy = (Math.random() - 0.5) * brushSize * 2.2;
@@ -365,32 +321,24 @@
         scratchCtx.arc(cx, cy, brushSize, 0, Math.PI * 2);
         scratchCtx.fill();
       }
-
       scratchCtx.globalCompositeOperation = 'source-over';
       lastScratchPos = { x: cx, y: cy };
-
-      // Measure how much has been revealed
       updateRevealProgress();
     }
 
     function updateRevealProgress() {
       if (isFullyRevealed) return;
-
       const canvas = document.getElementById('scratchCanvas');
       const ctx = scratchCtx;
       const w = canvas.width;
       const h = canvas.height;
-
-      // Sample a grid of pixels for performance (don't check every pixel)
       const sampleSize = 40;
       const stepX = Math.floor(w / sampleSize);
       const stepY = Math.floor(h / sampleSize);
       let transparent = 0;
       let total = 0;
-
       const imageData = ctx.getImageData(0, 0, w, h);
       const data = imageData.data;
-
       for (let y = 0; y < h; y += stepY) {
         for (let x = 0; x < w; x += stepX) {
           const idx = (y * w + x) * 4;
@@ -400,16 +348,11 @@
           }
         }
       }
-
       revealPercent = Math.round((transparent / total) * 100);
       document.getElementById('revealProgress').style.width = revealPercent + '%';
-
-      // Hide the hint after 15% scratched
       if (revealPercent > 15) {
         document.getElementById('colorHint').classList.add('hidden');
       }
-
-      // Auto-reveal at 65%
       if (revealPercent >= 65 && !isFullyRevealed) {
         fullyReveal();
       }
@@ -421,39 +364,30 @@
       canvas.classList.add('revealed');
       document.getElementById('revealProgress').style.width = '100%';
       document.getElementById('colorHint').classList.add('hidden');
-
-      // Show celebration sparkle
       const celeb = document.getElementById('revealCelebration');
       celeb.innerHTML = '✨💖✨';
       celeb.style.fontSize = '2.5rem';
       celeb.classList.add('show');
       setTimeout(() => celeb.classList.remove('show'), 800);
-
-      // Petal burst at center of card
       const rect = canvas.getBoundingClientRect();
       createPetalBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
     }
 
-    // ---- Mouse events ----
     document.getElementById('scratchCanvas').addEventListener('mousedown', (e) => {
       e.preventDefault();
       isScratching = true;
       lastScratchPos = null;
       scratchAt(e.clientX, e.clientY);
     });
-
     document.addEventListener('mousemove', (e) => {
       if (!isScratching) return;
       e.preventDefault();
       scratchAt(e.clientX, e.clientY);
     });
-
     document.addEventListener('mouseup', () => {
       isScratching = false;
       lastScratchPos = null;
     });
-
-    // ---- Touch events (mobile) ----
     document.getElementById('scratchCanvas').addEventListener('touchstart', (e) => {
       e.preventDefault();
       isScratching = true;
@@ -461,40 +395,28 @@
       const touch = e.touches[0];
       scratchAt(touch.clientX, touch.clientY);
     }, { passive: false });
-
     document.getElementById('scratchCanvas').addEventListener('touchmove', (e) => {
       if (!isScratching) return;
       e.preventDefault();
       const touch = e.touches[0];
       scratchAt(touch.clientX, touch.clientY);
     }, { passive: false });
-
     document.getElementById('scratchCanvas').addEventListener('touchend', () => {
       isScratching = false;
       lastScratchPos = null;
     });
 
-    // ========================================
-    //  Open rose modal with petal burst effect
-    // ========================================
     function openRoseModal(roseId, event) {
       const data = roseData[roseId];
       if (!data) return;
       currentRoseId = roseId;
-
-      // Petal burst animation at click point
       createPetalBurst(event.clientX, event.clientY);
-
-      // Set modal content (image underneath canvas)
       const imageFrame = document.getElementById('modalImageFrame');
       const message = document.getElementById('modalMessage');
-
-      // Remove existing image/placeholder, keep canvas + hint + celebration
       const existingImg = imageFrame.querySelector('img');
       const existingPlaceholder = imageFrame.querySelector('.placeholder-art');
       if (existingImg) existingImg.remove();
       if (existingPlaceholder) existingPlaceholder.remove();
-
       if (data.image) {
         const img = document.createElement('img');
         img.src = data.image;
@@ -509,25 +431,17 @@
         `;
         imageFrame.insertBefore(placeholder, imageFrame.firstChild);
       }
-
       message.innerHTML = `
         "${data.message}"
         <span class="rose-number">Rose ${roseId} of 5</span>
       `;
-
-      // Show modal
       document.getElementById('modalOverlay').classList.add('active');
       document.body.style.overflow = 'hidden';
-
-      // Initialize scratch canvas after modal animation completes (0.4s)
       setTimeout(() => {
         initScratchCanvas();
       }, 450);
     }
 
-    // ========================================
-    //  Close modal
-    // ========================================
     function closeModal(event) {
       if (event && event.target !== event.currentTarget) return;
       document.getElementById('modalOverlay').classList.remove('active');
@@ -537,52 +451,38 @@
       currentRoseId = null;
     }
 
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
 
-    // ========================================
-    //  Petal burst particle effect
-    // ========================================
     function createPetalBurst(x, y) {
       const burst = document.createElement('div');
       burst.className = 'petal-burst';
       burst.style.left = x + 'px';
       burst.style.top = y + 'px';
-
       const petals = ['🌸', '🩷', '💗', '✨', '🌺', '💮'];
-      
       for (let i = 0; i < 12; i++) {
         const petal = document.createElement('span');
         petal.className = 'petal';
         petal.textContent = petals[Math.floor(Math.random() * petals.length)];
-
         const angle = (Math.PI * 2 / 12) * i;
         const distance = 60 + Math.random() * 80;
         const tx = Math.cos(angle) * distance;
         const ty = Math.sin(angle) * distance;
         const rot = (Math.random() - 0.5) * 720;
-
         petal.style.setProperty('--tx', tx + 'px');
         petal.style.setProperty('--ty', ty + 'px');
         petal.style.setProperty('--rot', rot + 'deg');
         petal.style.animationDelay = (Math.random() * 0.15) + 's';
-
         burst.appendChild(petal);
       }
-
       document.body.appendChild(burst);
       setTimeout(() => burst.remove(), 2000);
     }
 
-    // ========================================
-    //  Floating hearts background
-    // ========================================
     function createFloatingHearts() {
       const container = document.getElementById('heartsBg');
       const hearts = ['♥', '♡', '❤', '💕'];
-      
       for (let i = 0; i < 25; i++) {
         const heart = document.createElement('span');
         heart.className = 'floating-heart';
@@ -594,41 +494,28 @@
         container.appendChild(heart);
       }
     }
-
     createFloatingHearts();
 
-    // ========================================
-    //  Lock Screen / PIN Entry
-    // ========================================
     const CORRECT_PIN = '0129';
     const pinDigits = document.querySelectorAll('.pin-digit');
     const lockHint = document.getElementById('lockHint');
-
-    // Auto-focus first digit
     pinDigits[0].focus();
-
     pinDigits.forEach((input, idx) => {
       input.addEventListener('input', (e) => {
         const val = e.target.value.replace(/[^0-9]/g, '');
         e.target.value = val;
-
         if (val) {
           input.classList.add('filled');
-          // Move to next input
           if (idx < 3) {
             pinDigits[idx + 1].focus();
           }
         }
-
-        // Check if all 4 digits are filled
         const fullPin = Array.from(pinDigits).map(d => d.value).join('');
         if (fullPin.length === 4) {
           setTimeout(() => checkPin(fullPin), 150);
         }
       });
-
       input.addEventListener('keydown', (e) => {
-        // Backspace: clear and go back
         if (e.key === 'Backspace') {
           if (!input.value && idx > 0) {
             pinDigits[idx - 1].value = '';
@@ -640,8 +527,6 @@
           }
         }
       });
-
-      // Select all text on focus for easy re-entry
       input.addEventListener('focus', () => {
         input.select();
       });
@@ -649,28 +534,23 @@
 
     function checkPin(pin) {
       if (pin === CORRECT_PIN) {
-        // Success!
         pinDigits.forEach(d => d.classList.add('success'));
         lockHint.textContent = '💖 Welcome, Kyla 💖';
         lockHint.classList.remove('error-msg');
         lockHint.style.opacity = '1';
         lockHint.style.fontSize = '1.1rem';
-
-        // Unlock after a brief moment
         setTimeout(() => {
           document.getElementById('lockScreen').classList.add('unlocked');
           document.body.classList.remove('page-locked');
           startBouquetAnimation();
         }, 800);
       } else {
-        // Wrong PIN
         pinDigits.forEach(d => {
           d.classList.add('error');
           d.classList.remove('filled');
         });
         lockHint.textContent = 'Try again 💕';
         lockHint.classList.add('error-msg');
-
         setTimeout(() => {
           pinDigits.forEach(d => {
             d.value = '';
@@ -683,16 +563,10 @@
       }
     }
 
-    // ========================================
-    //  Box Opening Sequence (starts after unlock)
-    // ========================================
     function startBouquetAnimation() {
-      // After all roses have sprung out, enable sparkle effects
       setTimeout(() => {
         document.getElementById('bouquetWrapper').classList.add('opened');
       }, 3400);
-
-      // Show instruction text only after box is fully open
       const instructionEl = document.querySelector('.header .instruction');
       if (instructionEl) {
         instructionEl.style.opacity = '0';
